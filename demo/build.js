@@ -11,6 +11,7 @@ export async function buildDemo(output = join(root, 'dist')) {
     ['demo/runner.js', 'demo/runner.js'],
     ['index.js', 'index.js'],
     ['LICENSE', 'LICENSE'],
+    ['THIRD_PARTY_NOTICES.txt', 'THIRD_PARTY_NOTICES.txt'],
     ['node_modules/acorn/dist/acorn.mjs', 'vendor/acorn.mjs'],
     ['node_modules/acorn/LICENSE', 'vendor/ACORN-LICENSE'],
   ];

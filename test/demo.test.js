@@ -12,7 +12,7 @@ test('builds a self-contained Pages demo whose module graph works under /dwim/',
   t.after(() => rm(directory, { recursive: true, force: true }));
   await writeFile(join(directory, 'stale.txt'), 'old build');
   await buildDemo(directory);
-  assert.deepEqual((await readdir(directory)).sort(), ['LICENSE', 'demo', 'index.html', 'index.js', 'vendor']);
+  assert.deepEqual((await readdir(directory)).sort(), ['LICENSE', 'THIRD_PARTY_NOTICES.txt', 'demo', 'index.html', 'index.js', 'vendor']);
   assert.equal(
     await readFile(join(directory, 'vendor/ACORN-LICENSE'), 'utf8'),
     await readFile(new URL('../node_modules/acorn/LICENSE', import.meta.url), 'utf8'),
