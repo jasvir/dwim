@@ -15,7 +15,7 @@ console.log(await randomIntInRange(0, 10));`,
 console.log(await reverse('hello world'));`,
   saySomethingSilly: `import DWIM from 'dwim';
 
-console.log(await DWIM.saySomethingSilly());`,
+await DWIM.saySomethingSilly();`,
   markdownToHtml: `import DWIM from 'dwim';
 
 document.getElementById('markdown-preview')?.remove();
