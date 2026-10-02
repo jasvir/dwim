@@ -35,6 +35,7 @@ Curious what it wrote? `await DWIM.$source('mergeSort')` shows the code.
 
 This is a joke that runs real, unsandboxed JavaScript. It can be wrong.
 If your app sets a Content Security Policy, it must allow `unsafe-eval`.
+Please definitely do not do that - this is a joke library!
 
 ## Run the demo locally
 
