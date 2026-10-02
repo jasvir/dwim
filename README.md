@@ -4,7 +4,7 @@ Library that implements every API you need hallucinated.
 
 **[Try the playground →](https://jasvir.github.io/dwim/)**
 
-Do what I mean. Ask for a function and Gemini Nano writes it on your device.
+Do what I mean. The largest library of functions in the world in practically a tiny number of bytes.  Ask for a function and Gemini Nano writes it on your device.
 The next call reuses the implementation. No server, API key, or runtime dependencies.
 
 ## Use it
