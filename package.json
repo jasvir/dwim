@@ -1,5 +1,5 @@
 {
-  "name": "dwim",
+  "name": "@jnagra/dwim",
   "version": "0.1.0",
   "description": "Library that implements every API you need hallucinated.",
   "type": "module",

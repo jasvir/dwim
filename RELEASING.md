@@ -9,10 +9,11 @@ npm ci
 npm test
 npm pack --dry-run
 npm login
-npm publish
+npm publish --access public
 ```
 
-The package is public and contains only `index.js`, `package.json`, the README,
+The package is published as `@jnagra/dwim` with public access and contains only
+`index.js`, `package.json`, the README,
 and the MIT license. Publishing runs the tests again. Bump `version` before
 publishing a later release; npm versions cannot be overwritten.
 

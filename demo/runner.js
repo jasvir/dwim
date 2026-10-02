@@ -12,7 +12,7 @@ export async function runProgram(code, { api, onImport = () => {}, onLog = () =>
   const imports = tree.body.filter(node => node.type === 'ImportDeclaration');
   visit(tree, node => {
     if (node.type === 'ImportExpression') {
-      throw new SyntaxError("Use a static import from 'dwim'; dynamic imports are not supported in this playground.");
+      throw new SyntaxError("Use a static import from '@jnagra/dwim'; dynamic imports are not supported in this playground.");
     }
     if (node.type.startsWith('Export')) {
       throw new SyntaxError('Exports are not supported in this playground. Use console.log or return a value.');
@@ -28,8 +28,9 @@ export async function runProgram(code, { api, onImport = () => {}, onLog = () =>
   const declarations = [];
   const importedPaths = [];
   for (const statement of imports) {
-    if (statement.source.value !== 'dwim') {
-      throw new SyntaxError("This playground only supports imports from 'dwim'.");
+    // Keep the original demo spelling working for saved playground programs.
+    if (!['@jnagra/dwim', 'dwim'].includes(statement.source.value)) {
+      throw new SyntaxError("This playground only supports imports from '@jnagra/dwim'.");
     }
     for (const specifier of statement.specifiers) {
       let value = `${context}.api`;

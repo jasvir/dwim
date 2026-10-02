@@ -35,7 +35,7 @@ test('accepts multiline default and named imports with aliases, including unused
       reverse as unused,
       DWIM as same,
       default as alsoSame
-    } from 'dwim';
+    } from '@jnagra/dwim';
     console.log(DWIM === same, same === alsoSame);
     return await sort([2, 1]);
   `, options);
@@ -48,7 +48,7 @@ test('hoists imports and provides namespace default, DWIM, and arbitrary functio
   const options = fixture();
   const result = await runProgram(`
     const answer = await library.reverse('dwim');
-    import * as library from 'dwim';
+    import * as library from '@jnagra/dwim';
     console.log(library.default === DWIM, library.DWIM === DWIM);
     return answer;
   `, options);
@@ -79,11 +79,22 @@ test('supports side-effect imports and string-literal import names', async () =>
   const options = fixture();
   options.api['some-name'] = async () => 7;
   assert.equal(await runProgram(`
-    import 'dwim';
-    import { 'some-name' as answer } from 'dwim';
+    import '@jnagra/dwim';
+    import { 'some-name' as answer } from '@jnagra/dwim';
     return await answer();
   `, options), 7);
   assert.deepEqual(options.imports, [['some-name']]);
+});
+
+test('preserves the dwim playground alias for saved programs', async () => {
+  const options = fixture();
+  assert.deepEqual(await runProgram(`
+    import DWIM, { reverse } from 'dwim';
+    import * as library from 'dwim';
+    import 'dwim';
+    return [DWIM === library.default, await reverse('dwim')];
+  `, options), [true, 'miwd']);
+  assert.deepEqual(options.imports, [['reverse']]);
 });
 
 test('captures console methods locally without replacing or mutating the global console', async () => {
@@ -111,9 +122,9 @@ test('preserves awaiting property values and control methods', async () => {
 
 test('rejects unsupported imports and module features clearly before running code', async () => {
   for (const [code, message] of [
-    ["import other from 'elsewhere';", /only supports imports from 'dwim'/],
-    ["import { createDWIM } from 'dwim';", /createDWIM is not available/],
-    ["await import('dwim');", /dynamic imports are not supported/],
+    ["import other from 'elsewhere';", /only supports imports from '@jnagra\/dwim'/],
+    ["import { createDWIM } from '@jnagra/dwim';", /createDWIM is not available/],
+    ["await import('@jnagra/dwim');", /dynamic imports are not supported/],
     ['export const value = 1;', /Exports are not supported/],
     ['console.log(import.meta.url);', /import.meta is not supported/],
   ]) {
@@ -122,7 +133,7 @@ test('rejects unsupported imports and module features clearly before running cod
     assert.deepEqual(options.logs, []);
   }
   await assert.rejects(runProgram(`
-    import * as library from 'dwim';
+    import * as library from '@jnagra/dwim';
     library.createDWIM();
   `, fixture()), /createDWIM is not available/);
 });

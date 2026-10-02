@@ -3,20 +3,20 @@ import { runProgram } from './runner.js';
 
 const $ = id => document.getElementById(id);
 const examples = {
-  mergeSort: `import DWIM from 'dwim';
+  mergeSort: `import DWIM from '@jnagra/dwim';
 
 const { mergeSort } = DWIM;
 console.log(await mergeSort([3, 1, 4, 1, 5]));`,
-  randomIntInRange: `import { randomIntInRange } from 'dwim';
+  randomIntInRange: `import { randomIntInRange } from '@jnagra/dwim';
 
 console.log(await randomIntInRange(0, 10));`,
-  reverse: `import { reverse } from 'dwim';
+  reverse: `import { reverse } from '@jnagra/dwim';
 
 console.log(await reverse('hello world'));`,
-  saySomethingSilly: `import DWIM from 'dwim';
+  saySomethingSilly: `import DWIM from '@jnagra/dwim';
 
 await DWIM.saySomethingSilly();`,
-  markdownToHtml: `import DWIM from 'dwim';
+  markdownToHtml: `import DWIM from '@jnagra/dwim';
 
 document.getElementById('markdown-preview')?.remove();
 let d = document.createElement('div');

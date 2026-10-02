@@ -10,11 +10,11 @@ The next call reuses the implementation. No server, API key, or runtime dependen
 ## Use it
 
 ```sh
-npm install dwim
+npm install @jnagra/dwim
 ```
 
 ```js
-import DWIM, { randomIntInRange } from 'dwim';
+import DWIM, { randomIntInRange } from '@jnagra/dwim';
 
 const { mergeSort } = DWIM;
 console.log(await mergeSort([3, 1, 4, 1, 5]));
