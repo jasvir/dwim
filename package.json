@@ -1,0 +1,44 @@
+{
+  "name": "dwim",
+  "version": "0.1.0",
+  "description": "Library that implements every API you need hallucinated.",
+  "type": "module",
+  "main": "./index.js",
+  "exports": "./index.js",
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "demo": "node demo/serve.js",
+    "build:demo": "node demo/build.js",
+    "preview": "node demo/serve.js --built",
+    "prepublishOnly": "npm test"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "dwim",
+    "gemini-nano",
+    "proxy",
+    "ai",
+    "hallucination"
+  ],
+  "author": "Jasvir Nagra",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasvir/dwim.git"
+  },
+  "homepage": "https://jasvir.github.io/dwim/",
+  "bugs": {
+    "url": "https://github.com/jasvir/dwim/issues"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "acorn": "^8.18.0"
+  }
+}
