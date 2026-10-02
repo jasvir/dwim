@@ -20,9 +20,10 @@ publishing a later release; npm versions cannot be overwritten.
 
 The playground lives at **https://jasvir.github.io/dwim/**.
 
-Once the repository is public, select **Settings → Pages → Build and deployment
-→ Source: GitHub Actions**, then run **Actions → Deploy Pages → Run workflow**.
-Later pushes to `main` deploy automatically. The workflow skips private repos.
+Select **Settings → Pages → Build and deployment → Source: GitHub Actions**,
+then run **Actions → Deploy Pages → Run workflow**. Later pushes to `main` deploy
+automatically. The demo is public; the repository can stay private if your
+GitHub plan supports Pages for private repositories. Only `dist/` is deployed.
 
 To check the same static build locally:
 

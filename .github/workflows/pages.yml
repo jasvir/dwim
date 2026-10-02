@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   build:
-    if: ${{ !github.event.repository.private && github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -34,7 +34,7 @@ jobs:
           path: dist
 
   deploy:
-    if: ${{ !github.event.repository.private && github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
