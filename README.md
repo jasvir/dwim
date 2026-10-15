@@ -33,6 +33,26 @@ accepts arbitrary named imports; the npm module's named exports are fixed.
 Curious what it wrote? `await DWIM.$source('mergeSort')` shows the code.
 `await DWIM.$destroy()` clears the cache and releases the model.
 
+## Write the body in English
+
+```js
+import { dwim } from '@jnagra/dwim';
+
+async function treeWalker(tree, callback, depthFirst) {
+  return eval(await dwim`
+    Visit every node of "tree", whose child nodes are in "children",
+    and call "callback" with each node. If "depthFirst" is true,
+    use preorder depth-first traversal; otherwise use breadth-first.
+  `);
+}
+```
+
+The tag generates and caches source. Direct `eval` inside your function gives it
+access to your arguments, callbacks, and local variables. They stay in that scope;
+only the description goes to Nano. Template substitutions become description text.
+The generated body is wrapped in an async arrow so `return` and `await` work.
+Keep the `return eval(await …)` at the call site: a tag alone cannot access its caller's scope.
+
 This is a joke that runs real, unsandboxed JavaScript. It can be wrong.
 If your app sets a Content Security Policy, it must allow `unsafe-eval`.
 Please definitely do not do that - this is a joke library!

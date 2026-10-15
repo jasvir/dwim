@@ -40,7 +40,7 @@ export async function runProgram(code, { api, onImport = () => {}, onLog = () =>
         if (name === 'createDWIM') {
           throw new SyntaxError('createDWIM is not available in the playground. Use its existing DWIM instance.');
         }
-        if (name !== 'default' && name !== 'DWIM') {
+        if (!['default', 'DWIM', 'dwim'].includes(name)) {
           value += `[${JSON.stringify(name)}]`;
           importedPaths.push([name]);
         }
@@ -88,7 +88,7 @@ export async function runProgram(code, { api, onImport = () => {}, onLog = () =>
     get(_target, name) {
       if (name === Symbol.toStringTag) return 'Module';
       if (typeof name === 'symbol') return undefined;
-      if (name === 'default' || name === 'DWIM') return trackedAPI;
+      if (name === 'default' || name === 'DWIM' || name === 'dwim') return trackedAPI;
       if (name === 'createDWIM') {
         throw new TypeError('createDWIM is not available in the playground. Use its existing DWIM instance.');
       }

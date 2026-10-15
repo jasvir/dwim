@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { runProgram } from '../demo/runner.js';
+import { createDWIM } from '../index.js';
 
 function fixture() {
   const imports = [];
@@ -166,3 +167,59 @@ test('drains calls started without await and preserves caught rejection semantic
   `, options), 'recovered');
   await assert.rejects(runProgram('await DWIM.fail();', options), /expected failure/);
 });
+
+for (const [name, declaration, tag] of [
+  ['named dwim import', "import { dwim } from '@jnagra/dwim';", 'dwim'],
+  ['aliased default import', "import hallucinate from '@jnagra/dwim';", 'hallucinate'],
+  ['namespace dwim export', "import * as library from '@jnagra/dwim';", 'library.dwim'],
+]) {
+  test(`runs direct-eval template bodies using ${name}`, async () => {
+    const requests = [];
+    const observations = [];
+    const api = createDWIM({
+      languageModel: {
+        async availability() { return 'available'; },
+        async create() {
+          return {
+            async clone() {
+              return {
+                async prompt(input) {
+                  requests.push(JSON.parse(input.slice('Request: '.length)));
+                  return JSON.stringify({ code: `
+                    await callback(tree.value);
+                    return [arguments[0] === tree, arguments[1] === callback, count];
+                  ` });
+                },
+                destroy() {},
+              };
+            },
+            destroy() {},
+          };
+        },
+      },
+      onCall: event => observations.push(event),
+    });
+    const options = { ...fixture(), api };
+    const result = await runProgram(`
+      ${declaration}
+      let count = 0;
+      async function visit(tree, callback) {
+        return eval(await ${tag}\`Call callback with tree.value and return argument identity plus count.\`);
+      }
+      return visit({ value: 'root' }, async value => {
+        await Promise.resolve();
+        count++;
+        console.log(value);
+      });
+    `, options);
+    assert.deepEqual(result, [true, true, 1]);
+    assert.deepEqual(options.logs, [['root']]);
+    assert.deepEqual(options.imports, []);
+    assert.deepEqual(requests, [{
+      operation: 'body', description: 'Call callback with tree.value and return argument identity plus count.',
+    }]);
+    assert.equal(observations.length, 1);
+    assert.equal(observations[0].kind, 'template');
+    await api.$destroy();
+  });
+}

@@ -33,6 +33,29 @@ __This is bold text__
 
 console.log(result);
 d.innerHTML = result;`,
+  treeWalker: `import { dwim } from '@jnagra/dwim';
+
+async function treeWalker(tree, callback, depthFirst) {
+  return eval(await dwim\`
+    Visit every node of "tree", whose child nodes are in "children",
+    and call "callback" with each node. If "depthFirst" is true,
+    use preorder depth-first traversal; otherwise use breadth-first.
+  \`);
+}
+
+const tree = {
+  name: 'A',
+  children: [
+    { name: 'B', children: [{ name: 'D' }] },
+    { name: 'C' },
+  ],
+};
+
+for (const depthFirst of [true, false]) {
+  const visited = [];
+  await treeWalker(tree, node => visited.push(node.name), depthFirst);
+  console.log(depthFirst ? 'Depth first:' : 'Breadth first:', visited);
+}`,
 };
 const entries = new Map();
 let ready = false;
@@ -83,8 +106,13 @@ function renderImplementations() {
     const section = document.createElement('section');
     section.className = 'implementation';
     const heading = document.createElement('h2');
-    heading.textContent = `DWIM.${entry.path.join('.')}`;
+    heading.textContent = entry.kind === 'template' ? 'dwim template' : `DWIM.${entry.path.join('.')}`;
     section.append(heading);
+    if (entry.kind === 'template') {
+      const description = document.createElement('p');
+      description.textContent = entry.description.trim();
+      section.append(description);
+    }
     if (entry.source) {
       const source = document.createElement('pre');
       source.textContent = entry.source;
@@ -92,7 +120,7 @@ function renderImplementations() {
     }
     if ('error' in entry || !entry.source) {
       const note = document.createElement('p');
-      note.textContent = 'error' in entry ? `Could not generate this function: ${entry.error?.message ?? format(entry.error)}`
+      note.textContent = 'error' in entry ? `Could not generate this implementation: ${entry.error?.message ?? format(entry.error)}`
         : 'Imported, not called yet. Its implementation is generated on the first call.';
       section.append(note);
     }
@@ -100,7 +128,7 @@ function renderImplementations() {
   }
 }
 function record(entry) {
-  const key = JSON.stringify(entry.path);
+  const key = JSON.stringify(entry.kind === 'template' ? ['template', entry.description] : ['function', entry.path]);
   const next = { ...entries.get(key), ...entry };
   if ('source' in entry && !('error' in entry)) delete next.error;
   entries.set(key, next);
